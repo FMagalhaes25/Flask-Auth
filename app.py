@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, jsonify
-from flask_login import LoginManager, login_user, current_user
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from models.user import User
 from dotenv import load_dotenv
 from database import db
@@ -39,7 +39,14 @@ def login():
             return jsonify({"message": "Seja bem-vindo, autenticação realizada com sucesso!"})
     
     return jsonify({"message": "Credenciais inválidas"}), 400
-    
+
+
+@app.route("/logout", methods=['GET'])
+@login_required #Decorator
+def logout():
+    logout_user()
+    return jsonify({"message": "Logout realizado com sucesos!"})
+     
 
 @app.route("/ola", methods=['GET'])
 def hello_world():
